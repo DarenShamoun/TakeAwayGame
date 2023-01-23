@@ -440,3 +440,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/build/x64-Debug

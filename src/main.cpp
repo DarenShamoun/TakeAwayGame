@@ -7,6 +7,9 @@
 void displayNames(mesa::option playerOptions);
 void displayGameState(std::vector<uint32_t> inputVector);
 game::gameState checkVictory(std::vector<uint32_t> pileVector, game::gameState inputState, mesa::option playerOptions);
+void player1Turn(game::gameState& inputState, std::vector<uint32_t>& pileVector, mesa::option& playerOptions);
+void player2Turn(game::gameState& currentState, std::vector<uint32_t>& pileVector, mesa::option& playerOptions);
+void aiTurn(game::gameState& currentState, std::vector<uint32_t>& pileVector, mesa::option& playerOptions);
 
 int main(int argc, const char* argv[])
 {
@@ -30,69 +33,23 @@ int main(int argc, const char* argv[])
 		pileVector = setNumberOfStones(pileVector, playerOptions);
 		currentState = evaluate(pileVector, currentState);
 
-		//Kepps the current game going until there are no stones left
+	//Keeps the current game going until there are no stones left
 		while (currentState.totalStones >= 1)
 		{
 //Activates when the player is facing the AI
 			if (playerOptions.has_ai)
 			{
-	//Begins player's turn
-				currentState = evaluate(pileVector, currentState);
-				std::cout << '\n' << playerOptions.player1Name << "'s turn,";
-				displayGameState(pileVector);
-
-				//Player 1 selects the pile they want to take from
-				currentState.targetPile = get_value("\nWhich pile would you like to take from?: ");
-				while (currentState.targetPile <= 0 || currentState.targetPile > currentState.numberOfPiles || pileVector[currentState.targetPile - 1] == 0)
-				{
-					std::cout << "You must choose a pile displayed above, ";
-					std::cout << "Try again:";
-					currentState.targetPile = get_value(" ");
-				}
-				currentState.targetPile--;
-
-				//Player 1 selects the amount of stones they want to take from the pile
-				currentState.numberToRemove = get_value("How many stones would you like to take?: ");
-				while (currentState.numberToRemove > pileVector[currentState.targetPile] || currentState.numberToRemove < 1)
-				{
-					std::cout << "Invalid entry! ";
-					std::cout << "Try again:";
-					currentState.numberToRemove = get_value(" ");
-				}
-				pileVector[currentState.targetPile] -= currentState.numberToRemove;
-				currentState = evaluate(pileVector, currentState);
-				currentState = checkVictory(pileVector, currentState, playerOptions);
+				//Begins player's turn
+				player1Turn(currentState, pileVector, playerOptions);
 				if (currentState.win) { break; }
-
+				
+				//switches to AI's turn
 				currentState.player1Turn = false;
 				std::cout << '\n' << playerOptions.player2Name << "'s turn,";
-	//Ends player's turn
-
-				//Reprints the game board
 				displayGameState(pileVector);
 
-	//The turn of the AI begins and it decides based on evaluate function
-				
-				currentState = evaluate(pileVector, currentState);
-
-				if (currentState.takeOne)
-				{
-					pileVector = take_one(pileVector, currentState.targetPile);
-					
-					std::cout << '\n' << playerOptions.player2Name << " removed "
-						<< currentState.numberToRemove << " stone from pile "
-						<< currentState.targetPile + 1 << '\n';
-				}
-
-				if (!currentState.takeOne)
-				{
-					pileVector = take_some(pileVector, currentState);
-					std::cout << '\n' << playerOptions.player2Name << " removed "
-						<< currentState.numberToRemove << " stones from pile "
-						<< currentState.targetPile + 1 << '\n';
-					currentState.takeOne = true;
-				}
-	//Ends Ai's turn
+				//Begins AI's turn
+				aiTurn(currentState, pileVector, playerOptions);
 			}
 
 			//Reprints the game board
@@ -102,81 +59,108 @@ int main(int argc, const char* argv[])
 
 			currentState.player1Turn = true;
 
-//Activates when the player is not using AI
+			
+//Activates only when there are two players
 			if (!playerOptions.has_ai)
 			{
 	//Player 1's turn begins here
-				currentState = evaluate(pileVector, currentState);
-				std::cout << '\n' << playerOptions.player1Name << "'s turn,";
-				displayGameState(pileVector);
-
-				//Player 1 selects the pile they want to take from
-				currentState.targetPile = get_value("\nWhich pile would you like to take from?: ");
-				while (currentState.targetPile <= 0 || currentState.targetPile > currentState.numberOfPiles || pileVector[currentState.targetPile -1] == 0)
-				{
-					std::cout << "You must choose a pile displayed above, ";
-					std::cout << "Try again:";
-					currentState.targetPile = get_value(" ");
-				}
-				currentState.targetPile--;
-
-				//Player 1 selects the amount of stones they want to take from the pile
-				currentState.numberToRemove = get_value("How many stones would you like to take?: ");
-				while (currentState.numberToRemove > pileVector[currentState.targetPile] || currentState.numberToRemove < 1)
-				{
-					std::cout << "Invalid entry! ";
-					std::cout << "Try again:";
-					currentState.numberToRemove = get_value(" ");
-				}
-				pileVector[currentState.targetPile] -= currentState.numberToRemove;
-				currentState = evaluate(pileVector, currentState);
-				currentState = checkVictory(pileVector, currentState, playerOptions);
+				player1Turn(currentState, pileVector, playerOptions);
 				if (currentState.win) { break; }
-
 				currentState.player1Turn = false;
-	//Ends player 1's turn
-
-				//Reprints the game board
-				std::cout << '\n' << playerOptions.player2Name << "'s turn,";
-				displayGameState(pileVector);
 
 	//Player 2's turn begins here
-
-				//Player 2 selects the pile they want to take from
-				currentState.targetPile = get_value("\nWhich pile would you like to take from?: ");
-				while (currentState.targetPile <= 0 || currentState.targetPile > currentState.numberOfPiles || pileVector[currentState.targetPile -1] == 0)
-				{
-					std::cout << "You must choose a pile displayed above, ";
-					std::cout << "Try again:";
-					currentState.targetPile = get_value(" ");
-				}
-				currentState.targetPile--;
-
-				//Player 2 selects the amount of stones they want to take from the pile
-				currentState.numberToRemove = get_value("How many stones would you like to take?: ");
-				while (currentState.numberToRemove > pileVector[currentState.targetPile] || currentState.numberToRemove < 1)
-				{
-					std::cout << "Invalid entry! ";
-					std::cout << "Try again:";
-					currentState.numberToRemove = get_value(" ");
-				}
-				pileVector[currentState.targetPile] -= currentState.numberToRemove;
-				
-				currentState = evaluate(pileVector, currentState);
-				currentState = checkVictory(pileVector, currentState, playerOptions);
+				player2Turn(currentState, pileVector, playerOptions);
 				if (currentState.win) { break; }
-
 				currentState.player1Turn = true;
-	//Ends player 2's turn
-
-				//Reprints the board with the updated state
 			}
-
 			currentState = checkVictory(pileVector, currentState, playerOptions);
 			if (currentState.win) { break; }
 		}
 	}
 	return 0;
+}
+
+//player #1's turn
+void player1Turn(game::gameState& currentState, std::vector<uint32_t>& pileVector, mesa::option& playerOptions)
+{
+	currentState = evaluate(pileVector, currentState);
+	std::cout << '\n' << playerOptions.player1Name << "'s turn,";
+	displayGameState(pileVector);
+
+	//Player 1 selects the pile they want to take from
+	currentState.targetPile = get_value("\nWhich pile would you like to take from?: ");
+	while (currentState.targetPile <= 0 || currentState.targetPile > currentState.numberOfPiles || pileVector[currentState.targetPile - 1] == 0)
+	{
+		std::cout << "You must choose a pile displayed above, ";
+		std::cout << "Try again:";
+		currentState.targetPile = get_value(" ");
+	}
+	currentState.targetPile--;
+
+	//Player 1 selects the amount of stones they want to take from the pile
+	currentState.numberToRemove = get_value("How many stones would you like to take?: ");
+	while (currentState.numberToRemove > pileVector[currentState.targetPile] || currentState.numberToRemove < 1)
+	{
+		std::cout << "Invalid entry! ";
+		std::cout << "Try again:";
+		currentState.numberToRemove = get_value(" ");
+	}
+	pileVector[currentState.targetPile] -= currentState.numberToRemove;
+	currentState = evaluate(pileVector, currentState);
+	currentState = checkVictory(pileVector, currentState, playerOptions);
+}
+
+void player2Turn(game::gameState& currentState, std::vector<uint32_t>& pileVector, mesa::option& playerOptions)
+{
+	std::cout << '\n' << playerOptions.player2Name << "'s turn,";
+	displayGameState(pileVector);
+
+	//Player 2 selects the pile they want to take from
+	currentState.targetPile = get_value("\nWhich pile would you like to take from?: ");
+	while (currentState.targetPile <= 0 || currentState.targetPile > currentState.numberOfPiles || pileVector[currentState.targetPile - 1] == 0)
+	{
+		std::cout << "You must choose a pile displayed above, ";
+		std::cout << "Try again:";
+		currentState.targetPile = get_value(" ");
+	}
+	currentState.targetPile--;
+
+	//Player 2 selects the amount of stones they want to take from the pile
+	currentState.numberToRemove = get_value("How many stones would you like to take?: ");
+	while (currentState.numberToRemove > pileVector[currentState.targetPile] || currentState.numberToRemove < 1)
+	{
+		std::cout << "Invalid entry! ";
+		std::cout << "Try again:";
+		currentState.numberToRemove = get_value(" ");
+	}
+	pileVector[currentState.targetPile] -= currentState.numberToRemove;
+
+	currentState = evaluate(pileVector, currentState);
+	currentState = checkVictory(pileVector, currentState, playerOptions);
+}
+
+void aiTurn(game::gameState& currentState, std::vector<uint32_t>& pileVector, mesa::option& playerOptions)
+{
+	//AI's turn begins here
+	currentState = evaluate(pileVector, currentState);
+
+	if (currentState.takeOne)
+	{
+		pileVector = take_one(pileVector, currentState.targetPile);
+
+		std::cout << '\n' << playerOptions.player2Name << " removed "
+			<< currentState.numberToRemove << " stone from pile "
+			<< currentState.targetPile + 1 << '\n';
+	}
+
+	if (!currentState.takeOne)
+	{
+		pileVector = take_some(pileVector, currentState);
+		std::cout << '\n' << playerOptions.player2Name << " removed "
+			<< currentState.numberToRemove << " stones from pile "
+			<< currentState.targetPile + 1 << '\n';
+		currentState.takeOne = true;
+	}
 }
 
 void displayNames(mesa::option playerOptions)
