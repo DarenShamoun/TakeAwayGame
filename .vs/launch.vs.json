@@ -1,0 +1,12 @@
+{
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "take-away.exe (src\\take-away.exe)",
+      "name": "take-away.exe (src\\take-away.exe)"
+    }
+  ]
+}
