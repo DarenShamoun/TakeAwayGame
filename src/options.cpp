@@ -1,5 +1,4 @@
 //Daren Shamoun
-//ID# 5550016094
 #include "options.h"
 #include "game.h"
 

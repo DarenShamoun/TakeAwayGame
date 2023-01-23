@@ -1,5 +1,4 @@
 //Daren Shamoun
-//ID# 5550016094
 #include "computer_player.h"
 
 //calculates the nimsum 

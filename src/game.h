@@ -1,8 +1,8 @@
 //Daren Shamoun
-//ID# 5550016094
-#ifndef CISC187_MESA_GAME_H
-#define CISC187_MESA_GAME_H
+#ifndef GAME_H
+#define GAME_H
 #include "options.h"
+#include "computer_player.h"
 #include <string>
 #include <cctype>
 #include <vector>
@@ -18,4 +18,16 @@ std::vector<uint32_t> pileVectorCreator(mesa::option userOptions);
 
 std::vector<uint32_t> setNumberOfStones(std::vector<uint32_t>, mesa::option userOptions);
 
-#endif // !CISC187_MESA_GAME_H
+void displayNames(mesa::option playerOptions);
+
+void displayGameState(std::vector<uint32_t> inputVector);
+
+game::gameState checkVictory(std::vector<uint32_t> pileVector, game::gameState inputState, mesa::option playerOptions);
+
+void player1Turn(game::gameState& inputState, std::vector<uint32_t>& pileVector, mesa::option& playerOptions);
+
+void player2Turn(game::gameState& currentState, std::vector<uint32_t>& pileVector, mesa::option& playerOptions);
+
+void aiTurn(game::gameState& currentState, std::vector<uint32_t>& pileVector, mesa::option& playerOptions);
+
+#endif // !GAME_H
