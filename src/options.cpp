@@ -6,7 +6,7 @@
 //displays the possible command line arguements
 std::string usage(const char* argv)
 {
-	std::string input(argv);
+	const std::string input(argv);
 	std::string usage = "Usage: " + input + " [-h] [-c] [-p # piles] [-s # stones]\n";
 	
 	return usage;

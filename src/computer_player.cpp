@@ -127,7 +127,7 @@ std::vector<uint32_t> take_one(std::vector<uint32_t> inputVector, uint32_t targe
 std::vector<uint32_t> take_some(std::vector<uint32_t> inputVector, game::gameState inputState)
 {
 	std::vector<uint32_t> pilesVector = inputVector;
-	game::gameState currentState = inputState;
+	const game::gameState currentState = inputState;
 	pilesVector[currentState.targetPile] -= currentState.numberToRemove;
 	return pilesVector;
 }

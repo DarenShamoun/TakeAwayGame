@@ -23,7 +23,7 @@ uint32_t get_value(std::string prompt)
 {
 	std::cout << prompt;
 	uint32_t userValue;
-	bool valid = true;
+	const bool valid = true;
 
 	while (valid)
 	{
@@ -54,9 +54,9 @@ std::vector<uint32_t> pileVectorCreator(mesa::option userOptions)
 	if (userOptions.piles == 0)
 	{
 		std::random_device rand;
-		std::mt19937 engine3(rand());
+		const std::mt19937 engine3(rand());
 		std::uniform_int_distribution<uint32_t> distr(2, 10);
-		uint32_t randomNumberOfPiles = uint32_t(distr(rand));
+		const uint32_t randomNumberOfPiles = uint32_t(distr(rand));
 		pilesVector.resize(randomNumberOfPiles);
 	}
 
@@ -89,7 +89,7 @@ std::vector<uint32_t> setNumberOfStones(std::vector<uint32_t> pileVector, mesa::
 	if (userOptions.stones == 0)
 	{
 		std::random_device rand;
-		std::mt19937 engine3(rand());
+		const std::mt19937 engine3(rand());
 		std::uniform_int_distribution<uint32_t> distr(2, 20);
 
 		for (auto i = 0; i < pilesVector.size(); i++)

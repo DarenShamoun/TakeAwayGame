@@ -33,20 +33,16 @@ int main(int argc, const char* argv[])
 		pileVector = setNumberOfStones(pileVector, playerOptions);
 		currentState = evaluate(pileVector, currentState);
 
-	//Keeps the current game going until there are no stones left
+		//Keeps the current game going until there are no stones left
 		while (currentState.totalStones >= 1)
 		{
-//Activates when the player is facing the AI
+		//Activates when the player is facing the AI
 			if (playerOptions.has_ai)
 			{
 				//Begins player's turn
 				player1Turn(currentState, pileVector, playerOptions);
 				if (currentState.win) { break; }
-				
-				//switches to AI's turn
 				currentState.player1Turn = false;
-				std::cout << '\n' << playerOptions.player2Name << "'s turn,";
-				displayGameState(pileVector);
 
 				//Begins AI's turn
 				aiTurn(currentState, pileVector, playerOptions);
@@ -60,15 +56,15 @@ int main(int argc, const char* argv[])
 			currentState.player1Turn = true;
 
 			
-//Activates only when there are two players
+		//Activates only when there are two players
 			if (!playerOptions.has_ai)
 			{
-	//Player 1's turn begins here
+				//Player 1's turn begins here
 				player1Turn(currentState, pileVector, playerOptions);
 				if (currentState.win) { break; }
 				currentState.player1Turn = false;
 
-	//Player 2's turn begins here
+				//Player 2's turn begins here
 				player2Turn(currentState, pileVector, playerOptions);
 				if (currentState.win) { break; }
 				currentState.player1Turn = true;
@@ -80,7 +76,7 @@ int main(int argc, const char* argv[])
 	return 0;
 }
 
-//player #1's turn
+//player #1's turn logic
 void player1Turn(game::gameState& currentState, std::vector<uint32_t>& pileVector, mesa::option& playerOptions)
 {
 	currentState = evaluate(pileVector, currentState);
@@ -110,6 +106,7 @@ void player1Turn(game::gameState& currentState, std::vector<uint32_t>& pileVecto
 	currentState = checkVictory(pileVector, currentState, playerOptions);
 }
 
+//player #2's turn logic
 void player2Turn(game::gameState& currentState, std::vector<uint32_t>& pileVector, mesa::option& playerOptions)
 {
 	std::cout << '\n' << playerOptions.player2Name << "'s turn,";
@@ -139,9 +136,11 @@ void player2Turn(game::gameState& currentState, std::vector<uint32_t>& pileVecto
 	currentState = checkVictory(pileVector, currentState, playerOptions);
 }
 
+//AI's turn logic
 void aiTurn(game::gameState& currentState, std::vector<uint32_t>& pileVector, mesa::option& playerOptions)
 {
 	//AI's turn begins here
+	std::cout << '\n' << playerOptions.player2Name << "'s turn,";
 	currentState = evaluate(pileVector, currentState);
 
 	if (currentState.takeOne)
@@ -163,6 +162,7 @@ void aiTurn(game::gameState& currentState, std::vector<uint32_t>& pileVector, me
 	}
 }
 
+//function to display the current player names
 void displayNames(mesa::option playerOptions)
 {
 	if (playerOptions.has_ai)
@@ -177,6 +177,7 @@ void displayNames(mesa::option playerOptions)
 	}
 }
 
+//function to display the current game state
 void displayGameState(std::vector<uint32_t> inputVector)
 {
 	std::vector<uint32_t> gameVector = inputVector;
@@ -192,6 +193,7 @@ void displayGameState(std::vector<uint32_t> inputVector)
 	std::cout << '\n' << std::string(35, '-');
 }
 
+//function to check if someone has won and handle responses afterwards
 game::gameState checkVictory(std::vector<uint32_t> pileVector, game::gameState inputState, mesa::option playerOptions)
 {
 	game::gameState currentState = inputState;
@@ -203,7 +205,7 @@ game::gameState checkVictory(std::vector<uint32_t> pileVector, game::gameState i
 		std::cout << '\n' << playerOptions.player1Name << " has won!\n";
 		
 		char userAnswer = NULL;
-		bool valid = true;
+		const bool valid = true;
 		while (valid)
 		{
 			std::cout << "Would you like to play again? [Y/N] " << std::endl;
@@ -224,7 +226,7 @@ game::gameState checkVictory(std::vector<uint32_t> pileVector, game::gameState i
 		std::cout << '\n' << playerOptions.player2Name << " has won!\n";
 		
 		char userAnswer = NULL;
-		bool valid = true;
+		const bool valid = true;
 		while (valid)
 		{
 			std::cout << "Would you like to play again? [Y/N] " << std::endl;
