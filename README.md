@@ -1,9 +1,9 @@
 #Take away game
 This is a two player game called `take away`.
-The AI player I have created is unbeatable unless the player 
+The AI "ULTRON" I have created is unbeatable unless the player 
 plays perfectly for all turns.
 The games consists of one or more piles.
-Typically, each pile contains stones or sticks.
+Each pile contains stones or sticks or whatever you feel like calling the items in the pile.
 
 A player may remove any number of stones from **a single pile**
 when it is their turn.
