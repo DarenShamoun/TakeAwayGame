@@ -1,5 +1,7 @@
 #Take away game
-The goal of this project was to create a two player game called `take away`.
+This is a two player game called `take away`.
+The AI player I have created is unbeatable unless the player 
+plays perfectly for all turns.
 The games consists of one or more piles.
 Typically, each pile contains stones or sticks.
 
@@ -9,20 +11,20 @@ The player who removes the last stone(s) wins.
 
 ## Basic Gameplay
 Ask each player for their name.
-The game should initialize the game with a random number of piles and 
+The game initializes with a random number of piles and 
 a random number of stones in each pile.
 The first player starts.
-When the game is over the program should display the name of the winning player
+When the game is over the program displays the name of the winning player
 and prompt to play another game.
 
-The game must only allow legal moves:
+The game only allows legal moves:
 - When it is a players turn they must remove at least 1 stone
 - A player cannot remove more stones than are in a single pile
 - A player may remove stones only from 1 pile per turn
 
-After each player turn the game should redraw the current state of
+After each player turn the game redraws the current state of
 all remaining piles.
-Do not display piles with 0 stones.
+Does not display piles with 0 stones.
 
 ## command line arguments: 
 
